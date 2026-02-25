@@ -9,5 +9,5 @@
 ## Deletion
 <img width="1920" height="913" alt="Screenshot from 2026-02-25 13-12-14" src="https://github.com/user-attachments/assets/e6091b74-b75a-41d9-86da-6a06f655d9ef" />
 
-## Update The Items
+## Update The Products
 <img width="1896" height="866" alt="Screenshot from 2026-02-25 13-12-41" src="https://github.com/user-attachments/assets/1e4b4295-c396-4cc7-a176-5dbf700444dc" />
