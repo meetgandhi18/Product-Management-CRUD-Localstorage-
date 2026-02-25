@@ -1,67 +1,63 @@
+import { getProducts, setProducts } from "./index.js";
+import { validateProduct } from "./validate.js";
+
 function displayProducts() {
-  let products = JSON.parse(localStorage.getItem("Products")) || [];
+  let products = getProducts();
+  let productList = document.getElementById("productList");
   productList.innerHTML = "";
 
   products.forEach((product) => {
     productList.innerHTML += `
         <div class="card m-3" style="width:250px;">
             <div class="card-body d-flex flex-column text-center">
-                <h5 class="card-title">${product.productname}</h5>
-                <img src="${product.image}" class="img-fluid mb-2" height="100">
-                <p><strong>Price:</strong> ${product.price}</p>
-                <p class="flex-grow-1">${product.description}</p>
+                <h5 class="card-title">${product.productName}</h5>
+                <img src="${product.productImage}" class="img-fluid mb-2" height="100">
+                <p><strong>Price:</strong> ${product.productPrice}</p>
+                <p class="flex-grow-1">${product.productDescription}</p>
 
                 <div class="d-flex justify-content-between mt-auto">
-                    <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.productid})">Delete</button>
-                    <button class="btn btn-warning btn-sm" onClick="editProduct(${product.productid})">Edit</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.productId})">Delete</button>
+                    <button class="btn btn-warning btn-sm" onClick="editProduct(${product.productId})">Edit</button>
                 </div>
             </div>
         </div>
     `;
   });
 }
-function deleteProduct(id) {
+
+//We Can' Acces Globally Created onclick listeners So we have to add winodw to use it
+window.deleteProduct = function (id) {
   if (!confirm("Are you sure you want to delete this product?")) {
     return;
   }
-  let products = JSON.parse(localStorage.getItem("Products"));
-  const updatedProducts = products.filter((p) => id != p.productid); //Keep The element Which Return True Removes Element Which Returns False That Got Removed From Object Array
+  let products = getProducts();
+  const updatedProducts = products.filter((p) => id != p.productId); //Keep The element Which Return True Removes Element Which Returns False That Got Removed From Object Array
 
-  // Using Reduce
-
-  //   let products = JSON.parse(localStorage.getItem("Products")) || [];
-  //   const updatedProducts = products.reduce((acc, crr) => {
-  //     if (crr.productid != id) {   // This Matches The All Productid with the id if it does not matches it pushes it to localstorage and if it matches it will skip it
-  //       acc.push(crr);
-  //     }
-  //     console.log(acc)
-  //     return acc;
-  //   }, []);
-
-  localStorage.setItem("Products", JSON.stringify(updatedProducts));
+  setProducts(updatedProducts);
   displayProducts();
   alert("Product Deleted!!");
-}
+};
 
 displayProducts();
 
-function editProduct(id) {
-  let products = JSON.parse(localStorage.getItem("Products")) || [];
-  let product = products.filter((p) => p.productid == id)[0];//Returns Us An Object So We Take Only The first Array element From it
+//We Can' Acces Globally Created onclick listeners So we have to add winodw to use it
+window.editProduct = function (id) {
+  let products = getProducts();
+  let product = products.filter((p) => p.productId == id)[0]; //Returns Us An Object So We Take Only The first Array element From it
   if (!product) return;
 
-  document.getElementById("editProductId").value = product.productid;
-  document.getElementById("editProductName").value = product.productname;
-  document.getElementById("editPrice").value = product.price;
-  document.getElementById("editDescription").value = product.description;
+  document.getElementById("editProductId").value = product.productId;
+  document.getElementById("editProductName").value = product.productName;
+  document.getElementById("editPrice").value = product.productPrice;
+  document.getElementById("editDescription").value = product.productDescription;
 
   // Clear file input every time modal opens
   document.getElementById("editFile").value = "";
 
- //Model shows after The Value is Set
+  //Model shows after The Value is Set
   let modal = new bootstrap.Modal(document.getElementById("editModal"));
   modal.show();
-}
+};
 
 let form = document.getElementById("editForm");
 form.addEventListener("submit", function (e) {
@@ -74,31 +70,34 @@ form.addEventListener("submit", function (e) {
   let fileInput = document.getElementById("editFile");
   let file = fileInput.files[0]; // Gets The Fisrt File Selected by User If User Selects Multiple Files
 
-  let products = JSON.parse(localStorage.getItem("Products")) || [];
+  let isValid = validateProduct({pId: id,pName: name,file: file || { size: 0 },price: price,des: description,}); // {size: 0 handle Optional Image}
+  if (!isValid) return;
 
-  let currentProduct = products.filter((p) => p.productid == id)[0];//Returns Us An Object So We Take Only The first Array element From it
+  let products = getProducts();
+
+  let currentProduct = products.filter((p) => p.productId == id)[0]; //Returns Us An Object So We Take Only The first Array element From it
   if (!currentProduct) return;
 
   function saveProduct(finalImage) {
     // Remove old product
-    let updatedProducts = products.filter((p) => p.productid != id);
+    let updatedProducts = products.filter((p) => p.productId != id);
 
     // Push updated product
     updatedProducts.push({
-      productid: id,
-      productname: name,
-      price: price,
-      description: description,
-      image: finalImage,
+      productId: id,
+      productName: name,
+      productPrice: price,
+      productDescription: description,
+      productImage: finalImage,
     });
 
-    localStorage.setItem("Products", JSON.stringify(updatedProducts));
+    setProducts(updatedProducts);
 
     alert("Product Updated Successfully!");
     displayProducts();
-    
-// Get the existing Bootstrap modal instance of #editModal
-// (used to control the modal like hide(), show(), etc.)
+
+    // Get the existing Bootstrap modal instance of #editModal
+    // (used to control the modal like hide(), show(), etc.)
     let modal = bootstrap.Modal.getInstance(
       document.getElementById("editModal"),
     );
@@ -113,6 +112,6 @@ form.addEventListener("submit", function (e) {
     };
     reader.readAsDataURL(file);
   } else {
-    saveProduct(currentProduct.image);
+    saveProduct(currentProduct.productImage);
   }
 });
