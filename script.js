@@ -5,7 +5,7 @@ import { sortProducts } from "./helper.js";
 function displayProducts(products = getProducts()) {
   let productList = document.getElementById("productList");
 
-  if (products) {
+  if (products.length === 0 || null) {
     console.log(products)
     productList.innerHTML = `
     <center>
