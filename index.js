@@ -1,16 +1,6 @@
 import { validateProduct } from "./validate.js";
 let saveBtn = document.getElementById("save-btn");
-
-// Get products from localStorage
-export let getProducts = () => {
-  let products = JSON.parse(localStorage.getItem("Products")) || [];
-  return products;
-};
-
-// Save products to localStorage
-export let setProducts = (products) => {
-  localStorage.setItem("Products", JSON.stringify(products));
-};
+import { getProducts,setProducts } from "./helper.js";
 
 //Clears the input field when form is submitted
 let clearInputFiels = () => {

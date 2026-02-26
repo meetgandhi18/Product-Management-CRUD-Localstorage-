@@ -1,8 +1,9 @@
-import { getProducts, setProducts } from "./index.js";
+import { getProducts, setProducts } from "./helper.js";
 import { validateProduct } from "./validate.js";
+import { sortProducts } from "./helper.js";
 
-function displayProducts() {
-  let products = getProducts();
+function displayProducts(products = null) {
+  products = products || getProducts();
   let productList = document.getElementById("productList");
   productList.innerHTML = "";
 
@@ -115,3 +116,16 @@ form.addEventListener("submit", function (e) {
     saveProduct(currentProduct.productImage);
   }
 });
+
+
+//Event Deligation Put Event Listner On Parent (Bubbling)
+
+let sortFilter = document.getElementById('sortFilter')
+if(sortFilter){
+  sortFilter.addEventListener('change',function(){
+      let products = getProducts()
+      let value = this.value
+      sortProducts(products,value)
+      displayProducts(products)
+  })
+}
