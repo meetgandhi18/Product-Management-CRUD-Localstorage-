@@ -1,11 +1,11 @@
 // Get products from localStorage
-export let getProducts = () => {
+export const getProducts = () => {
   let products = JSON.parse(localStorage.getItem("Products")) || [];
   return products;
 };
 
 // Save products to localStorage
-export let setProducts = (products) => {
+export const setProducts = (products) => {
   localStorage.setItem("Products", JSON.stringify(products));
 };
 
@@ -35,9 +35,7 @@ export function sortProducts(products, value) {
     case "price-desc":
       products.sort((a, b) => Number(b.productPrice) - Number(a.productPrice));
       break;
-
-    default:
-      products = getProducts();
   }
+  return products;
 }
 

@@ -2,9 +2,19 @@ import { getProducts, setProducts } from "./helper.js";
 import { validateProduct } from "./validate.js";
 import { sortProducts } from "./helper.js";
 
-function displayProducts(products = null) {
-  products = products || getProducts();
+function displayProducts(products = getProducts()) {
   let productList = document.getElementById("productList");
+
+  if (products) {
+    console.log(products)
+    productList.innerHTML = `
+    <center>
+    <h1 class="text-dark mt-5">No Products Added Please Add Products!!</h1>
+    </center>
+    `;
+    return;
+  }
+
   productList.innerHTML = "";
 
   products.forEach((product) => {
@@ -71,7 +81,13 @@ form.addEventListener("submit", function (e) {
   let fileInput = document.getElementById("editFile");
   let file = fileInput.files[0]; // Gets The Fisrt File Selected by User If User Selects Multiple Files
 
-  let isValid = validateProduct({pId: id,pName: name,file: file || { size: 0 },price: price,des: description,}); // {size: 0 handle Optional Image}
+  let isValid = validateProduct({
+    pId: id,
+    pName: name,
+    file: file || { size: 0 },
+    price: price,
+    des: description,
+  }); // {size: 0 handle Optional Image}
   if (!isValid) return;
 
   let products = getProducts();
@@ -117,15 +133,14 @@ form.addEventListener("submit", function (e) {
   }
 });
 
-
 //Event Deligation Put Event Listner On Parent (Bubbling)
 
-let sortFilter = document.getElementById('sortFilter')
-if(sortFilter){
-  sortFilter.addEventListener('change',function(){
-      let products = getProducts()
-      let value = this.value
-      sortProducts(products,value)
-      displayProducts(products)
-  })
+let sortFilter = document.getElementById("sortFilter");
+if (sortFilter) {
+  sortFilter.addEventListener("change", function () {
+    let products = getProducts();
+    let value = this.value;
+    const sortedProducts = sortProducts(products, value);
+    displayProducts(sortedProducts);
+  });
 }

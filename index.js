@@ -22,8 +22,6 @@ if (saveBtn) {
     let des = document.getElementById("description").value.trim();
     let file = imageInput.files[0];
 
-    console.log(pId);
-
     let isValid = validateProduct({ pId, pName, file, price, des });
     if (!isValid){
       clearInputFiels();
