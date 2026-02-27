@@ -83,9 +83,11 @@ form.addEventListener("submit", function (e) {
   let isValid = validateProduct({
     pId: id,
     pName: name,
-    file: file || { size: 0 },
+    file: file,
     price: price,
     des: description,
+    isEdit: true,
+
   }); // {size: 0 handle Optional Image}
   if (!isValid) return;
 
@@ -121,14 +123,14 @@ form.addEventListener("submit", function (e) {
   }
 
   // If new image selected
-  if (file) {
+  if (!file) {
+    saveProduct(currentProduct.productImage);
+  } else {
     let reader = new FileReader();
     reader.onload = function () {
       saveProduct(reader.result);
     };
     reader.readAsDataURL(file);
-  } else {
-    saveProduct(currentProduct.productImage);
   }
 });
 
