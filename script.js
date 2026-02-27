@@ -2,7 +2,8 @@ import { getProducts, setProducts } from "./helper.js";
 import { validateProduct } from "./validate.js";
 import { sortProducts } from "./helper.js";
 
-function displayProducts(products = getProducts()) {
+function displayProducts() {
+  let products = getProducts()
   let productList = document.getElementById("productList");
 
   if (products.length === 0 || null) {
@@ -35,6 +36,8 @@ function displayProducts(products = getProducts()) {
   });
 }
 
+displayProducts();
+
 //We Can' Acces Globally Created onclick listeners So we have to add winodw to use it
 window.deleteProduct = function (id) {
   if (!confirm("Are you sure you want to delete this product?")) {
@@ -48,7 +51,7 @@ window.deleteProduct = function (id) {
   alert("Product Deleted!!");
 };
 
-displayProducts();
+
 
 //We Can' Acces Globally Created onclick listeners So we have to add winodw to use it
 window.editProduct = function (id) {
