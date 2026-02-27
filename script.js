@@ -1,9 +1,18 @@
-import { getProducts, setProducts } from "./index.js";
+import { getProducts, setProducts } from "./helper.js";
 import { validateProduct } from "./validate.js";
+import { sortProducts } from "./helper.js";
 
-function displayProducts() {
-  let products = getProducts();
+function displayProducts( products = getProducts()) {
   let productList = document.getElementById("productList");
+  if (products.length === 0 || null) {
+    productList.innerHTML = `
+    <center>
+    <h1 class="text-dark mt-5">No Products Added Please Add Products!!</h1>
+    </center>
+    `;
+    return;
+  }
+
   productList.innerHTML = "";
 
   products.forEach((product) => {
@@ -25,6 +34,8 @@ function displayProducts() {
   });
 }
 
+displayProducts();
+
 //We Can' Acces Globally Created onclick listeners So we have to add winodw to use it
 window.deleteProduct = function (id) {
   if (!confirm("Are you sure you want to delete this product?")) {
@@ -38,7 +49,7 @@ window.deleteProduct = function (id) {
   alert("Product Deleted!!");
 };
 
-displayProducts();
+
 
 //We Can' Acces Globally Created onclick listeners So we have to add winodw to use it
 window.editProduct = function (id) {
@@ -70,7 +81,15 @@ form.addEventListener("submit", function (e) {
   let fileInput = document.getElementById("editFile");
   let file = fileInput.files[0]; // Gets The Fisrt File Selected by User If User Selects Multiple Files
 
-  let isValid = validateProduct({pId: id,pName: name,file: file || { size: 0 },price: price,des: description,}); // {size: 0 handle Optional Image}
+  let isValid = validateProduct({
+    pId: id,
+    pName: name,
+    file: file,
+    price: price,
+    des: description,
+    isEdit: true,
+
+  }); // {size: 0 handle Optional Image}
   if (!isValid) return;
 
   let products = getProducts();
@@ -105,13 +124,25 @@ form.addEventListener("submit", function (e) {
   }
 
   // If new image selected
-  if (file) {
+  if (!file) {
+    saveProduct(currentProduct.productImage);
+  } else {
     let reader = new FileReader();
     reader.onload = function () {
       saveProduct(reader.result);
     };
     reader.readAsDataURL(file);
-  } else {
-    saveProduct(currentProduct.productImage);
   }
 });
+
+//Event Deligation Put Event Listner On Parent (Bubbling)
+
+let sortFilter = document.getElementById("sortFilter");
+if (sortFilter) {
+  sortFilter.addEventListener("change", function () {
+    let products = getProducts();
+    let value = this.value;
+    const sortedProducts = sortProducts(products, value);
+    displayProducts(sortedProducts);
+  });
+}
