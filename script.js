@@ -2,10 +2,8 @@ import { getProducts, setProducts } from "./helper.js";
 import { validateProduct } from "./validate.js";
 import { sortProducts } from "./helper.js";
 
-function displayProducts() {
-  let products = getProducts()
+function displayProducts( products = getProducts()) {
   let productList = document.getElementById("productList");
-
   if (products.length === 0 || null) {
     productList.innerHTML = `
     <center>
