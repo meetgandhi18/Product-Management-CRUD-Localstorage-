@@ -22,6 +22,7 @@ function displayProducts( products = getProducts()) {
                 <h5 class="card-title">${product.productName}</h5>
                 <img src="${product.productImage}" class="img-fluid mb-2" height="100">
                 <p><strong>Price:</strong> ${product.productPrice}</p>
+                <p class="flex-grow-1 fw-bold">Product Id: ${product.productId}</p>
                 <p class="flex-grow-1">${product.productDescription}</p>
 
                 <div class="d-flex justify-content-between mt-auto">
@@ -145,4 +146,21 @@ if (sortFilter) {
     const sortedProducts = sortProducts(products, value);
     displayProducts(sortedProducts);
   });
+}
+
+//Add Search Filter Logic
+
+let searchInput = document.getElementById('searchInput')
+
+if(searchInput){
+searchInput.addEventListener('input',function(e){
+  let value = e.target.value.trim()
+  let products = getProducts()
+  if(!value){
+    displayProducts(products);
+    return;
+  }
+  let filteredProducts = products.filter((p)=>p.productId.includes(value));
+  displayProducts(filteredProducts)
+})
 }

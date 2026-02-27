@@ -19,21 +19,28 @@
             </a>
         </div>
 
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <div class="d-flex gap-3">
+                    <input 
+                        type="number" 
+                        id="searchInput" 
+                        class="form-control"
+                        placeholder="Search Product By ID..."
+                    >
 
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <select id="sortFilter" class="form-select">
-                    <option value="">Sort By</option>
-                    <option value="id-asc">Product ID (Low → High)</option>
-                    <option value="id-desc">Product ID (High → Low)</option>
-                    <option value="name-asc">Product Name (A → Z)</option>
-                    <option value="name-desc">Product Name (Z → A)</option>
-                    <option value="price-asc">Price (Low → High)</option>
-                    <option value="price-desc">Price (High → Low)</option>
-                </select>
+                    <select id="sortFilter" class="form-select">
+                        <option value="">Sort By</option>
+                        <option value="id-asc">ID (Low → High)</option>
+                        <option value="id-desc">ID (High → Low)</option>
+                        <option value="name-asc">Name (A → Z)</option>
+                        <option value="name-desc">Name (Z → A)</option>
+                        <option value="price-asc">Price (Low → High)</option>
+                        <option value="price-desc">Price (High → Low)</option>
+                    </select>
+                </div>
             </div>
         </div>
-
 
         <div class="row d-flex flex-wrap" id="productList"></div>
 
